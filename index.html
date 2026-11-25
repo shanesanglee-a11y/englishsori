@@ -599,6 +599,25 @@ nav a.arc b{font:400 10px var(--pxf)}
 .view *:not(.play):not(.pit):not(.lip):not(.dot){border-radius:0!important}
 .crow>span{color:var(--ink)}.crow>span small{color:var(--sub)}
 @media(prefers-reduced-motion:reduce){.cloud,.blink,.listen .bub.on{animation:none}}
+
+/* ---------- 타이틀 화면 (픽셀 장면 캔버스) ---------- */
+body[data-v=home] .top{display:none}
+#v-home>.hero{display:none}
+.title{position:relative;height:100vh;height:100svh;min-height:540px;overflow:hidden;--u:2px;background:#78CAF8}
+.title canvas.pxs{position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated;image-rendering:crisp-edges}
+.tmenu{position:absolute;left:50%;top:var(--mt,35%);transform:translateX(-50%);display:flex;flex-direction:column;gap:calc(var(--u)*8);width:calc(var(--u)*104);max-width:80%}
+.pbtn{position:relative;display:block;text-align:center;text-decoration:none;font:700 calc(var(--u)*11)/1 Galmuri11,sans-serif;color:#fff;background:#6CC04A;padding:calc(var(--u)*5) 0 calc(var(--u)*6);margin:0 var(--u);
+ text-shadow:var(--u) var(--u) 0 #2A1A2E;
+ box-shadow:inset 0 var(--u) 0 #A6E67C,inset 0 calc(var(--u)*-2) 0 #3F8A2B,0 calc(var(--u)*-1) 0 #2A1A2E,var(--u) 0 0 #2A1A2E,calc(var(--u)*-1) 0 0 #2A1A2E,0 var(--u) 0 #2A1A2E,0 calc(var(--u)*3) 0 #2A1A2E}
+.pbtn.o{background:#FFF4D6;color:#2A1A2E;text-shadow:none;box-shadow:inset 0 var(--u) 0 #FFFFFF,inset 0 calc(var(--u)*-2) 0 #E3C98F,0 calc(var(--u)*-1) 0 #2A1A2E,var(--u) 0 0 #2A1A2E,calc(var(--u)*-1) 0 0 #2A1A2E,0 var(--u) 0 #2A1A2E,0 calc(var(--u)*3) 0 #2A1A2E}
+.pbtn:active{transform:translateY(calc(var(--u)*2))}
+.pbtn .cur{position:absolute;left:calc(var(--u)*-11);top:50%;transform:translateY(-50%);visibility:hidden}
+.pbtn .cur svg{width:calc(var(--u)*5);height:calc(var(--u)*7);display:block}
+.pbtn.on .cur{visibility:visible;animation:blink 1s steps(2,start) infinite}
+.tmenu:hover .pbtn.on:not(:hover) .cur{visibility:hidden}.pbtn:hover .cur{visibility:visible}
+.tpress{text-align:center;font:400 calc(var(--u)*8)/1 "Press Start 2P",monospace;color:#fff;text-shadow:var(--u) var(--u) 0 #2A1A2E;margin-top:calc(var(--u)*4)}
+.tmore{position:absolute;left:50%;bottom:calc(var(--u)*6);transform:translateX(-50%);font:700 calc(var(--u)*11)/1 Galmuri11,sans-serif;color:#fff;text-decoration:none;text-shadow:var(--u) var(--u) 0 #2A1A2E;white-space:nowrap}
+.vh{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 </style>
 </head>
 <body>
@@ -609,6 +628,17 @@ nav a.arc b{font:400 10px var(--pxf)}
 
 <main>
 <section class="view" id="v-home">
+  <div class="title" id="titlescr"><canvas class="pxs" aria-hidden="true"></canvas>
+    <h1 class="vh">영어소리 — 파닉스 연구소</h1>
+    <div class="tmenu" role="navigation" aria-label="시작 메뉴">
+      <a class="pbtn on" href="#test"><i class="cur"><svg viewBox="0 0 5 7" shape-rendering="crispEdges" aria-hidden="true"><path fill="#2A1A2E" d="M0 0h1v7H0zM1 1h1v5H1zM2 2h1v3H2zM3 3h1v1H3z"/><path fill="#fff" d="M1 2h1v3H1zM2 3h1v1H2z"/></svg></i>시작하기</a>
+      <a class="pbtn o" href="#arcade"><i class="cur"><svg viewBox="0 0 5 7" shape-rendering="crispEdges" aria-hidden="true"><path fill="#2A1A2E" d="M0 0h1v7H0zM1 1h1v5H1zM2 2h1v3H2zM3 3h1v1H3z"/><path fill="#fff" d="M1 2h1v3H1zM2 3h1v1H2z"/></svg></i>오락실 <span id="tlv">Lv1</span></a>
+      <a class="pbtn o" href="#course"><i class="cur"><svg viewBox="0 0 5 7" shape-rendering="crispEdges" aria-hidden="true"><path fill="#2A1A2E" d="M0 0h1v7H0zM1 1h1v5H1zM2 2h1v3H2zM3 3h1v1H3z"/><path fill="#fff" d="M1 2h1v3H1zM2 3h1v1H2z"/></svg></i>과정 지도</a>
+      <p class="tpress blink">PRESS START</p>
+    </div>
+    <a class="tmore" href="#intro">▼ 처음 오셨나요?</a>
+  </div>
+  <div id="intro"></div>
   <div class="hero band sky" id="herosky"><div class="wrap">
     <span class="kicker">미국 유치원·초등 과정 그대로 · 베타 무료</span>
     <h1 class="ptitle">미국 아이들이 배우는 순서 그대로,<br>소리부터 다시</h1>
@@ -805,7 +835,8 @@ R.home=()=>{
   $('#ctab').innerHTML=GRADES.map(g=>{const ids=g.pa.flatMap(([,l])=>l.map(([c])=>g.id+'.'+c));return `<div class="crow"><span>${g.name}<small>소리 트랙 ${ids.length}</small></span><div class="ctiles">${ids.map(ctile).join('')}<a class="ixp" href="#course" title="글자·읽기 트랙 — 미국 학교 순서">글자·읽기<b>${nIxl(g)}</b></a></div></div>`}).join('');
   const nx=nextSkill(),started=ORDER.some(c=>scoreOf(c)>0);
   $('#herocta').innerHTML=(nx?`<a class="btn y" href="${hrefOf(nx)}">${started?`이어서 하기 · ${cd(nx)}`:'Pre-K부터 시작하기'}</a>`:`<a class="btn y" href="#course">과정 전체 보기</a>`)+`<a class="btn ink" href="#arcade">오락실 · Lv${lvOf(S.xp||0)}</a><a class="btn ghost" href="#test">5분 진단</a>`;
-  scenery($('#herosky'),{clouds:5});
+  const tl=$('#tlv');if(tl)tl.textContent='Lv'+lvOf(S.xp||0);
+  (document.fonts&&document.fonts.load?document.fonts.load('bold 22px Galmuri11').catch(()=>{}):Promise.resolve()).then(()=>{if(onView('v-home'))pxMount($('#titlescr'),drawTitle)});
   $('#ptable').innerHTML=`<a class="el ph" href="#test"><i>01</i><s></s><b>Ph</b><em>5분 진단</em></a>`+MODS.map(m=>tile(m)).join('');
 };
 
@@ -1277,6 +1308,94 @@ function moleEnd(){
   gainXP(xp);
 }
 
+/* ---------- 픽셀 장면 엔진: 작은 캔버스에 그리고 정수 배율로 키움 ---------- */
+const PX={K:'#2A1A2E',sky:['#4FB6F2','#62C0F5','#78CAF8','#90D5FA','#AADFFC','#C4E9FD'],sun:['#FFC93C','#FFE066','#FFF3A8'],
+ cl:['#FFFFFF','#E6F4FF','#C9E3F7'],city:['#A3D8F2','#B5E0F6','#D9F2FD'],hill:['#9BDA74','#84CC5F'],
+ leaf:['#3C8B37','#56B346','#7CD256','#A8E87A'],trunk:['#7A4A2A','#9C6236'],grass:['#8BDD57','#74CC45','#4F9E31'],dirt:['#E6B56C','#D29C52','#B98140','#F2CC8A'],
+ fl:['#FF7EB0','#FFD23F','#FFFFFF','#B48CFF','#FF9F45']};
+function rng(seed){let a=seed>>>0;return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+function pxctx(cv){const c=cv.getContext('2d');c.imageSmoothingEnabled=false;
+  const o={c,W:cv.width,H:cv.height,
+    r:(x,y,w,h,col)=>{c.fillStyle=col;c.fillRect(Math.round(x),Math.round(y),Math.round(w),Math.round(h))},
+    p:(x,y,col)=>{c.fillStyle=col;c.fillRect(Math.round(x),Math.round(y),1,1)},
+    circ:(cx,cy,rd,col)=>{c.fillStyle=col;cx=Math.round(cx);cy=Math.round(cy);for(let y=-rd;y<=rd;y++){const w=Math.floor(Math.sqrt(rd*rd-y*y)+.35);c.fillRect(cx-w,cy+y,2*w+1,1)}},
+    spr:(rows,x,y,pal,s)=>{s=s||1;rows.forEach((row,j)=>{for(let i=0;i<row.length;i++){const k=row[i];if(k!=='.'){c.fillStyle=pal[k];c.fillRect(Math.round(x)+i*s,Math.round(y)+j*s,s,s)}}})}};
+  return o}
+// 하늘: 띠 + 경계 디더링
+function pxSky(g,y0,y1){const n=PX.sky.length,bh=(y1-y0)/n;
+  for(let i=0;i<n;i++){g.r(0,y0+i*bh,g.W,bh+1,PX.sky[i])}
+  for(let i=1;i<n;i++){const yb=Math.round(y0+i*bh);for(let y=yb-2;y<yb;y++)for(let x=(y&1);x<g.W;x+=2)g.p(x,y,PX.sky[i])}}
+// 구름 (캐시된 작은 캔버스)
+const CLD={};
+function cloudCv(v){if(CLD[v])return CLD[v];const R=rng(v*97+3),n=4+(v%3),cv=document.createElement('canvas');cv.width=70;cv.height=30;const g=pxctx(cv);
+  const bs=[];let x=10;for(let i=0;i<n;i++){const r=5+Math.floor(R()*5)+(i===1||i===2?3:0);bs.push([x,20-r*0.55,r]);x+=r+2+Math.floor(R()*3)}
+  bs.forEach(([x,y,r])=>g.circ(x,y+2,r,PX.cl[2]));bs.forEach(([x,y,r])=>g.circ(x,y,r,PX.cl[0]));
+  bs.forEach(([x,y,r])=>{g.circ(x,y+1,r-2,PX.cl[0])});bs.forEach(([x,y,r])=>g.r(x-r+2,y+r-3,r*2-3,2,PX.cl[1]));
+  g.c.clearRect(0,24,70,6);g.r(bs[0][0]-bs[0][2]+2,22,x-bs[0][0]+bs[0][2]-8,2,PX.cl[2]);
+  CLD[v]=cv;return cv}
+function pxSun(g,cx,cy){g.circ(cx,cy,15,'rgba(255,224,102,.35)');
+  for(let a=0;a<8;a++){const an=a*Math.PI/4,dx=Math.cos(an),dy=Math.sin(an);for(let k=17;k<21;k++)g.r(cx+dx*k-1,cy+dy*k-1,2,2,PX.sun[0])}
+  g.circ(cx,cy,11,PX.sun[0]);g.circ(cx,cy,9,PX.sun[1]);g.circ(cx-3,cy-3,4,PX.sun[2])}
+function pxCity(g,base,seed){const R=rng(seed);let x=-4;
+  while(x<g.W){const w=10+Math.floor(R()*12),h=14+Math.floor(R()*30),col=R()<.5?PX.city[0]:PX.city[1];g.r(x,base-h,w,h,col);g.r(x,base-h,w,1,PX.city[2]);
+    if(R()<.4)g.r(x+Math.floor(w/2)-1,base-h-4,2,4,col);
+    for(let yy=base-h+3;yy<base-2;yy+=4)for(let xx=x+2;xx<x+w-2;xx+=3)if(R()<.75)g.r(xx,yy,1,2,PX.city[2]);x+=w+1}}
+function pxTree(g,x,base,h,s){const R=rng(s);g.r(x-2,base-h,4,h,PX.trunk[0]);g.r(x-1,base-h,1,h,PX.trunk[1]);
+  const cy=base-h-6,bs=[[0,0,9],[-7,4,7],[7,4,7],[0,-6,7],[-4,-3,6],[5,-2,6]].map(([dx,dy,r])=>[x+dx,cy+dy,r+Math.floor(R()*2)]);
+  bs.forEach(([a,b,r])=>g.circ(a,b,r+1,PX.K));bs.forEach(([a,b,r])=>g.circ(a,b,r,PX.leaf[1]));bs.forEach(([a,b,r])=>g.circ(a,b+2,r-2,PX.leaf[0]));
+  bs.forEach(([a,b,r])=>g.circ(a-2,b-2,Math.max(1,r-4),PX.leaf[2]));bs.slice(0,3).forEach(([a,b,r])=>g.r(a-3,b-r+2,2,2,PX.leaf[3]))}
+function pxBush(g,x,base,w,s){const R=rng(s),bs=[];let xx=x;while(xx<x+w){const r=4+Math.floor(R()*4);bs.push([xx,base-r+2,r]);xx+=r+1}
+  bs.forEach(([a,b,r])=>g.circ(a,b,r+1,PX.K));bs.forEach(([a,b,r])=>g.circ(a,b,r,PX.leaf[1]));bs.forEach(([a,b,r])=>g.circ(a-1,b-1,r-2,PX.leaf[2]));bs.forEach(([a,b,r])=>g.r(a-2,b-r+1,2,1,PX.leaf[3]))}
+function pxFlower(g,x,y,col){g.r(x,y,1,3,PX.leaf[0]);g.p(x-1,y-1,col);g.p(x+1,y-1,col);g.p(x,y-2,col);g.p(x,y,col);g.p(x,y-1,PX.fl[1])}
+function pxGround(g,gy,seed){const R=rng(seed),W=g.W,H=g.H;
+  g.r(0,gy,W,1,PX.K);g.r(0,gy+1,W,6,PX.grass[0]);for(let x=-8;x<W+8;x+=8)for(let k=0;k<6;k++)g.r(x+k,gy+1+k,4,1,PX.grass[1]);
+  g.r(0,gy+7,W,2,PX.grass[2]);g.r(0,gy+9,W,H-gy-9,PX.dirt[0]);
+  for(let y=gy+11;y<H;y+=6)for(let x=((y/6)&1)*7;x<W;x+=14){g.r(x,y,5,2,PX.dirt[1]);g.p(x,y,PX.dirt[3])}
+  for(let i=0;i<W*(H-gy)/90;i++){const x=Math.floor(R()*W),y=gy+12+Math.floor(R()*(H-gy-12));g.r(x,y,2,1,PX.dirt[2])}}
+// 픽셀 글자: 글꼴을 원래 크기로 찍고 선명하게(반투명 제거) → 외곽선·입체 그림자
+const TXT={};
+function pxText(str,size,fill,opt){opt=opt||{};const key=str+size+fill.join()+JSON.stringify(opt);if(TXT[key])return TXT[key];
+  const m=document.createElement('canvas').getContext('2d');m.font=`bold ${size}px Galmuri11`;const tw=Math.ceil(m.measureText(str).width)+8,th=size+10;
+  const a=document.createElement('canvas');a.width=tw;a.height=th;const ac=a.getContext('2d');ac.font=`bold ${size}px Galmuri11`;ac.textBaseline='top';ac.fillStyle='#000';ac.fillText(str,3,3);
+  const d=ac.getImageData(0,0,tw,th).data,on=new Uint8Array(tw*th);let top=th,bot=0;
+  for(let i=0;i<tw*th;i++)if(d[i*4+3]>110){on[i]=1;const y=Math.floor(i/tw);top=Math.min(top,y);bot=Math.max(bot,y)}
+  const o=document.createElement('canvas'),sh=opt.shadow==null?2:opt.shadow;o.width=tw;o.height=th+sh;const g=pxctx(o);const at=(x,y)=>x>=0&&y>=0&&x<tw&&y<th&&on[y*tw+x];
+  const ol=new Uint8Array(tw*th);for(let y=0;y<th;y++)for(let x=0;x<tw;x++)if(!at(x,y))for(let dy=-1;dy<=1&&!ol[y*tw+x];dy++)for(let dx=-1;dx<=1;dx++)if(at(x+dx,y+dy)){ol[y*tw+x]=1;break}
+  for(let y=0;y<th;y++)for(let x=0;x<tw;x++)if(ol[y*tw+x]||on[y*tw+x])for(let k=1;k<=sh;k++)g.p(x,y+k,opt.sc||PX.K);
+  for(let y=0;y<th;y++)for(let x=0;x<tw;x++){if(ol[y*tw+x])g.p(x,y,opt.oc||PX.K);else if(on[y*tw+x]){const f=(y-top)/Math.max(1,bot-top);g.p(x,y,fill[Math.min(fill.length-1,Math.floor(f*fill.length))])}}
+  TXT[key]=o;return o}
+const BUNNY=["...KK......KK...","..KWWK....KWWK..","..KWPK....KPWK..","..KWPK....KPWK..","..KWPK....KPWK..","..KWWK....KWWK..","...KWWKKKKWWK...","..KWWWWWWWWWWK..",".KWWWWWWWWWWWWK.",".KWWkWWWWWWkWWK.",".KWWkWWWWWWkWWK.",".KWPWWWppWWWPWK.",".KWWWWWKKWWWWWK.","..KWWWWWWWWWWK..","..KwWWWWWWWWwK..",".KwWWWWWWWWWWwK.",".KwwWWWWWWWWwwK.","..KwwWWWWWWwwK..","..KKwwKKKKwwKK..","...KKK....KKK..."];
+const BUNNY_PAL={K:'#2A1A2E',W:'#FFFFFF',w:'#DCE2F0',P:'#FF9CC0',p:'#E9608A',k:'#2A1A2E'};
+const HEART7=[".KK.KK.","KRRKRRK","KRWRRRK","KRRRRRK",".KRRRK.","..KRK..","...K..."];
+// 장면 루프
+let PXS=null;
+function pxStop(){if(PXS){cancelAnimationFrame(PXS.raf);PXS=null}}
+function pxMount(host,draw){pxStop();const cv=host.querySelector('canvas.pxs');if(!cv)return;
+  const fit=()=>{const r=host.getBoundingClientRect(),u=Math.max(2,Math.min(5,Math.round(r.width/200),Math.floor(r.height/300)));cv.width=Math.ceil(r.width/u);cv.height=Math.ceil(r.height/u);host.style.setProperty('--u',u+'px');return u};
+  let u=fit(),last=0;const st={raf:0,t0:performance.now(),host};PXS=st;
+  const loop=now=>{if(PXS!==st||!host.isConnected||host.closest('[hidden]')){return}st.raf=requestAnimationFrame(loop);if(now-last<66)return;last=now;
+    const r=host.getBoundingClientRect();if(Math.ceil(r.width/u)!==cv.width||Math.ceil(r.height/u)!==cv.height)u=fit();
+    {const g=pxctx(cv);g.u=u;draw(g,(now-st.t0)/1000,u)}};
+  st.raf=requestAnimationFrame(loop)}
+// 타이틀 화면 그리기
+function drawTitle(g,t){const W=g.W,H=g.H,gy=Math.round(H*.84);
+  pxSky(g,0,gy);pxSun(g,Math.round(W*.2),Math.round(H*.1));
+  [[.05,.15,1],[.62,.08,2],[.3,.3,3],[.78,.36,4],[-.1,.5,5]].forEach(([fx,fy,v],i)=>{const cv=cloudCv(v),sp=1.2+i*.4;const x=((fx*W+t*sp)%(W+80))-40;g.c.drawImage(cv,Math.round(x),Math.round(fy*H))});
+  pxCity(g,gy-10,7);g.circ(W*.1,gy+20,40,PX.hill[1]);g.circ(W*.85,gy+26,46,PX.hill[0]);
+  pxTree(g,Math.round(W*.12),gy,10,3);pxTree(g,Math.round(W*.88),gy,14,9);pxBush(g,Math.round(W*.28),gy+1,26,5);pxBush(g,Math.round(W*.62),gy+1,22,8);
+  for(let i=0;i<14;i++){const R=rng(i+40),x=Math.round(R()*W);pxFlower(g,x,gy-2,PX.fl[i%5===1?0:i%5])}
+  pxGround(g,gy,11);
+  const tl=pxText('영어소리',22,['#FFF6B0','#FFD23F','#FFC02A','#F7931E']),st=pxText('파닉스 연구소',11,['#FFFFFF'],{shadow:1});
+  const ls=(H>=380&&W>=tl.width*2+60)?2:1,ty=Math.round(H*(ls>1?.1:.12)),hb=ty-16*ls;g.c.imageSmoothingEnabled=false;
+  for(let i=0;i<5;i++)g.spr(HEART7,Math.round(W/2-21*ls+i*9*ls),hb,{K:PX.K,R:'#FF4D6D',W:'#FFFFFF'},ls);
+  g.c.drawImage(tl,Math.round(W/2-tl.width*ls/2),ty,tl.width*ls,tl.height*ls);
+  const sy=ty+tl.height*ls+2*ls;g.c.drawImage(st,Math.round(W/2-st.width/2),sy);
+  const by=gy-20+(Math.floor(t*3)%2);g.spr(BUNNY,Math.round(W*.5-8),by,BUNNY_PAL);
+  // 메뉴는 항상 부제 아래에서 시작
+  const u=g.u||1,mt=Math.max(Math.round(H*.33),sy+st.height+12)*u;
+  if(PXS&&PXS.mt!==mt){PXS.mt=mt;PXS.host.style.setProperty('--mt',mt+'px')}
+}
+
 /* ---------- 기록 ---------- */
 R.log=()=>{
   const days=[];for(let k=13;k>=0;k--){const d=new Date();d.setDate(d.getDate()-k);days.push([d,S.days[dkey(d)]||0])}
@@ -1636,6 +1755,7 @@ function route(){
   if(!VIEWS.includes(v))v='home';
   if(v==='result'&&!S.diag)v='test';
   document.querySelectorAll('.view').forEach(e=>e.hidden=e.id!=='v-'+v);
+  document.body.dataset.v=v;
   const nv={drill:'train',swipe:'train',test:'train',result:'train',skill:'course',learn:'course',game:'arcade'}[v]||v;
   if(v!=='swipe')swOff();
   if(v!=='game')gameOff();
