@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>파닉스 연구소 — 소리부터 영어</title>
+<title>잉글리쉬소리</title>
 <meta name="description" content="한국 사람이 못 듣는 영어 소리를 5분 진단으로 찾고, 하루 10분 훈련으로 귀를 뚫어요. R/L·F/P·V/B·TH/S 짝소리 훈련과 미국식 파닉스 과정.">
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="파닉스 연구소">
-<meta property="og:title" content="파닉스 연구소 — 소리부터 영어">
+<meta property="og:site_name" content="잉글리쉬소리">
+<meta property="og:title" content="잉글리쉬소리">
 <meta property="og:description" content="5분 진단으로 내 귀가 못 듣는 영어 소리를 찾고, 쇼츠처럼 넘기며 훈련해요.">
 <meta property="og:url" content="https://englishsori.com/">
 <meta property="og:locale" content="ko_KR">
@@ -613,14 +613,14 @@ body[data-v=home] .top{display:none}
 </head>
 <body>
 <header class="top">
-  <a class="brand" href="#home" aria-label="파닉스 연구소 홈"><span class="logo">Ph</span><span><b>파닉스 연구소</b><span class="serif">Phonics Lab</span></span></a>
+  <a class="brand" href="#home" aria-label="잉글리쉬소리 홈"><span class="logo">ES</span><span><b>잉글리쉬소리</b><span class="serif">English Sori</span></span></a>
   <nav><a href="#test">LEVEL TEST</a><a href="#course">LEARN</a><a href="#train">PRACTICE</a><a href="#log">MY STATS</a></nav>
 </header>
 
 <main>
 <section class="view" id="v-home">
   <div class="title" id="titlescr"><canvas class="pxs" aria-hidden="true"></canvas>
-    <h1 class="vh">ENGLISH SORI 영어소리 — PHONICS LAB 파닉스 연구소</h1>
+    <h1 class="vh">잉글리쉬소리 ENGLISH SORI</h1>
     <div class="tmenu" role="navigation" aria-label="메인 메뉴">
       <a class="pbtn r on" href="#test"><i class="cur"><svg viewBox="0 0 5 7" shape-rendering="crispEdges" aria-hidden="true"><path fill="#2A1A2E" d="M0 0h1v7H0zM1 1h1v5H1zM2 2h1v3H2zM3 3h1v1H3z"/><path fill="#fff" d="M1 2h1v3H1zM2 3h1v1H2z"/></svg></i>LEVEL TEST</a>
       <a class="pbtn o" href="#course"><i class="cur"><svg viewBox="0 0 5 7" shape-rendering="crispEdges" aria-hidden="true"><path fill="#2A1A2E" d="M0 0h1v7H0zM1 1h1v5H1zM2 2h1v3H2zM3 3h1v1H3z"/><path fill="#fff" d="M1 2h1v3H1zM2 3h1v1H2z"/></svg></i>LEARN</a>
@@ -664,7 +664,7 @@ body[data-v=home] .top{display:none}
     <div class="table" id="ptable"></div>
     <div class="row" style="margin-top:22px"><a class="btn ink" href="#test">5분 진단</a><a class="btn ghost" href="#train">보충 훈련 목록</a></div>
   </div></div>
-  <footer class="band foot"><div class="wrap">파닉스 연구소 Phonics Lab · 베타 버전 · 글자·읽기 트랙은 미국 학년별 읽기 과정, 소리 트랙은 미국 학교 음소 인식 훈련 순서를 따랐어요 · 음성은 미국 영어 AI 목소리(원어민 녹음으로 교체 예정) · 기록은 이 기기 브라우저에만 저장돼요.</div></footer>
+  <footer class="band foot"><div class="wrap">잉글리쉬소리 English Sori · 베타 버전 · 글자·읽기 트랙은 미국 학년별 읽기 과정, 소리 트랙은 미국 학교 음소 인식 훈련 순서를 따랐어요 · 기록은 이 기기 브라우저에만 저장돼요.</div></footer>
 </section>
 
 <section class="view app" id="v-test" hidden></section>
@@ -1267,7 +1267,7 @@ function drawScene(g,t,o){o=o||{};const W=g.W,H=g.H,gy=Math.round(H*(o.gy||.84))
   pxGround(g,gy,11);
   return gy}
 function drawTitle(g,t){const W=g.W,H=g.H,gy=drawScene(g,t);
-  const tl=pxText('영어소리',22,['#FFF6B0','#FFD23F','#FFC02A','#F7931E']),st=pxText('파닉스 연구소',11,['#FFFFFF'],{shadow:1});
+  const tl=pxText('잉글리쉬소리',22,['#FFF6B0','#FFD23F','#FFC02A','#F7931E']),st=pxText('파닉스 연구소',11,['#FFFFFF'],{shadow:1});
   const ls=(H>=380&&W>=tl.width*2+60)?2:1,ty=Math.round(H*(ls>1?.1:.12)),hb=ty-16*ls;g.c.imageSmoothingEnabled=false;
   for(let i=0;i<5;i++)g.spr(HEART7,Math.round(W/2-21*ls+i*9*ls),hb,{K:PX.K,R:'#FF4D6D',W:'#FFFFFF'},ls);
   g.c.drawImage(tl,Math.round(W/2-tl.width*ls/2),ty,tl.width*ls,tl.height*ls);
