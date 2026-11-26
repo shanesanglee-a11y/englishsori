@@ -774,15 +774,22 @@ function streak(){let d=new Date(),n=0;if(!S.days[dkey(d)])d.setDate(d.getDate()
 const GOAL=60;
 
 /* ---------- 소리 ---------- */
-let AC=null,MAN=null,cur=null;const PK={},BUF={};
+// 녹음 원본 파일을 그대로 받아 단어마다 정해진 구간(초)만 재생한다. 음질·소리 크기는 바꾸지 않는다.
+let AC=null,MAN=null,cur=null;const PK={},BUF={},RAW={},DEC=new Map();
 function unlock(){try{if(navigator.audioSession&&navigator.audioSession.type!=='playback')navigator.audioSession.type='playback'}catch(e){}try{if(!AC){const A=window.AudioContext||window.webkitAudioContext;if(A)AC=new A()}if(AC&&AC.state!=='running')AC.resume()}catch(e){}}
-function loadPack(id){if(!PK[id])PK[id]=fetch(MAN.packs[id].file,{cache:'no-cache'}).then(r=>{if(!r.ok)throw new Error('audio');return r.arrayBuffer()}).then(ab=>{const n=MAN.packs[id].size,x=n?ab.byteLength-n:0;return x>0?ab.slice(x):ab});return PK[id]}
+const srcURL=i=>encodeURI(MAN.src[i]);
+function fetchSrc(i){if(!RAW[i])RAW[i]=fetch(srcURL(i)).then(r=>{if(!r.ok)throw new Error('audio');return r.arrayBuffer()}).catch(e=>{delete RAW[i];throw e});return RAW[i]}
+function decSrc(i){
+  if(DEC.has(i)){const p=DEC.get(i);DEC.delete(i);DEC.set(i,p);return p}
+  const p=fetchSrc(i).then(ab=>new Promise((res,rej)=>{const q=AC.decodeAudioData(ab.slice(0),res,rej);if(q&&q.then)q.then(res,rej)}));
+  DEC.set(i,p);p.then(()=>{delete RAW[i]},()=>DEC.delete(i));while(DEC.size>6)DEC.delete(DEC.keys().next().value);return p}
+function loadPack(id){if(!PK[id]){const s=[...new Set(Object.values(MAN.packs[id].clips).map(c=>c[0]))];PK[id]=fetchSrc(s[0]).then(()=>{s.slice(1,4).forEach(i=>fetchSrc(i).catch(()=>{}))}).catch(e=>{delete PK[id];throw e})}return PK[id]}
 const has=(id,w,v)=>!!MAN.packs[id].clips[w+'|'+v];
 async function clip(id,w,v){
   const k=id+'|'+w+'|'+v;if(BUF[k])return BUF[k];
-  const ab=await loadPack(id);const [o,l]=MAN.packs[id].clips[w+'|'+v];const sl=ab.slice(o,o+l);
-  if(AC){BUF[k]=await new Promise((res,rej)=>{const p=AC.decodeAudioData(sl,res,rej);if(p&&p.then)p.then(res,rej)})}
-  else BUF[k]=URL.createObjectURL(new Blob([sl],{type:'audio/mpeg'}));
+  const [i,t0,t1]=MAN.packs[id].clips[w+'|'+v];
+  if(AC){const b=await decSrc(i),sr=b.sampleRate,a=Math.max(0,Math.round(t0*sr)),e=Math.min(b.length,Math.round(t1*sr)),o=AC.createBuffer(b.numberOfChannels,Math.max(1,e-a),sr);for(let c=0;c<b.numberOfChannels;c++)o.getChannelData(c).set(b.getChannelData(c).subarray(a,e));BUF[k]=o}
+  else BUF[k]=srcURL(i)+'#t='+t0+','+t1;
   return BUF[k];
 }
 async function say(id,w,v){
